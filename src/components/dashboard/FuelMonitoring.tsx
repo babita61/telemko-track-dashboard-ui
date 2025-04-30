@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Fuel, MoreHorizontal, Droplets, Calendar } from 'lucide-react';
+import { Fuel, MoreHorizontal, Droplets, Calendar, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useToast } from '@/hooks/use-toast';
 
 // This would be imported from Recharts in a real implementation
 const FuelChart = () => (
@@ -20,11 +21,20 @@ const FuelChart = () => (
 );
 
 const FuelMonitoring: React.FC = () => {
+  const { toast } = useToast();
+  
   const refuelingEvents = [
     { id: 1, vehicle: 'TX-001', amount: '45L', cost: '$67.50', date: 'April 28, 2025' },
     { id: 2, vehicle: 'VN-003', amount: '35L', cost: '$52.50', date: 'April 26, 2025' },
     { id: 3, vehicle: 'SD-010', amount: '50L', cost: '$75.00', date: 'April 24, 2025' }
   ];
+  
+  const handleExportPDF = () => {
+    toast({
+      title: "Exporting PDF",
+      description: "Your fuel monitoring report is being generated as PDF.",
+    });
+  };
 
   return (
     <Card className="dashboard-card">
@@ -33,20 +43,31 @@ const FuelMonitoring: React.FC = () => {
           <Fuel className="mr-2 h-5 w-5 text-primary" />
           Fuel Monitoring
         </CardTitle>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <MoreHorizontal className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Options</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View Detailed Report</DropdownMenuItem>
-            <DropdownMenuItem>Configure Alerts</DropdownMenuItem>
-            <DropdownMenuItem>Export Data</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={handleExportPDF}
+            className="flex items-center gap-1"
+          >
+            <Download className="h-4 w-4" />
+            <span>PDF</span>
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreHorizontal className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Options</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer">View Detailed Report</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">Configure Alerts</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" onClick={handleExportPDF}>Export Data</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="mb-6">

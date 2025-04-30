@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
   LayoutDashboard,
@@ -16,6 +16,7 @@ import {
   CircleUser,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -23,16 +24,28 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar }) => {
+  const location = useLocation();
+  const { toast } = useToast();
+
   const navigation = [
-    { name: 'Dashboard', href: '/', icon: LayoutDashboard, current: true },
-    { name: 'Vehicle Tracking', href: '/tracking', icon: Map, current: false },
-    { name: 'Fuel Monitoring', href: '/fuel', icon: Fuel, current: false },
-    { name: 'Eco Drive', href: '/eco', icon: Leaf, current: false },
-    { name: 'Reports', href: '/reports', icon: FileBarChart, current: false },
-    { name: 'CANbus Data', href: '/canbus', icon: Database, current: false },
-    { name: 'Tachograph', href: '/tachograph', icon: Clock, current: false },
-    { name: 'Settings', href: '/settings', icon: Settings, current: false },
+    { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+    { name: 'Vehicle Tracking', href: '/tracking', icon: Map },
+    { name: 'Fuel Monitoring', href: '/fuel', icon: Fuel },
+    { name: 'Eco Drive', href: '/eco', icon: Leaf },
+    { name: 'Reports', href: '/reports', icon: FileBarChart },
+    { name: 'CANbus Data', href: '/canbus', icon: Database },
+    { name: 'Tachograph', href: '/tachograph', icon: Clock },
+    { name: 'Settings', href: '/settings', icon: Settings },
   ];
+
+  const handleNavClick = (item: typeof navigation[0]) => {
+    if (item.href !== location.pathname) {
+      toast({
+        title: `Navigating to ${item.name}`,
+        description: `Loading ${item.name.toLowerCase()} data...`,
+      });
+    }
+  };
 
   return (
     <div 
@@ -86,20 +99,24 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar }) => {
       {/* Navigation */}
       <nav className="mt-5 px-2 flex-1 overflow-y-auto">
         <ul className="space-y-1">
-          {navigation.map((item) => (
-            <li key={item.name}>
-              <Link
-                to={item.href}
-                className={cn(
-                  'nav-item',
-                  item.current && 'active'
-                )}
-              >
-                <item.icon size={20} />
-                {!collapsed && <span>{item.name}</span>}
-              </Link>
-            </li>
-          ))}
+          {navigation.map((item) => {
+            const isActive = location.pathname === item.href;
+            return (
+              <li key={item.name}>
+                <Link
+                  to={item.href}
+                  className={cn(
+                    'nav-item',
+                    isActive && 'active'
+                  )}
+                  onClick={() => handleNavClick(item)}
+                >
+                  <item.icon size={20} />
+                  {!collapsed && <span>{item.name}</span>}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 

@@ -1,21 +1,48 @@
 
-import React from 'react';
-import DashboardLayout from '@/components/layout/DashboardLayout';
+import React, { useContext } from 'react';
+import DashboardLayout, { DashboardContext } from '@/components/layout/DashboardLayout';
 import KpiCard from '@/components/dashboard/KpiCard';
-import { Route, MapPin, Fuel, Leaf } from 'lucide-react';
+import { Route, MapPin, Fuel, Leaf, Download } from 'lucide-react';
 import VehicleMap from '@/components/dashboard/VehicleMap';
 import VehicleFilter from '@/components/dashboard/VehicleFilter';
 import AlertsPanel from '@/components/dashboard/AlertsPanel';
 import FuelMonitoring from '@/components/dashboard/FuelMonitoring';
 import EcoDrive from '@/components/dashboard/EcoDrive';
 import VehicleDiagnostics from '@/components/dashboard/VehicleDiagnostics';
+import UserActivity from '@/components/dashboard/UserActivity';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
+  const { openDrawer } = useContext(DashboardContext);
+  const { toast } = useToast();
+  
+  const handleExportDashboard = () => {
+    toast({
+      title: "Exporting Dashboard",
+      description: "Your dashboard overview is being exported as PDF.",
+    });
+  };
+  
+  const handleVehicleClick = (vehicleId: string) => {
+    openDrawer('vehicle', `Vehicle Details - ${vehicleId}`, { id: vehicleId });
+  };
+
   return (
     <DashboardLayout>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
-        <p className="text-gray-500">Welcome to TelemkoTrack fleet management system</p>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <p className="text-gray-500">Welcome to TelemkoTrack fleet management system</p>
+        </div>
+        <Button 
+          variant="outline" 
+          onClick={handleExportDashboard}
+          className="flex items-center gap-2"
+        >
+          <Download className="h-4 w-4" />
+          Export Dashboard
+        </Button>
       </div>
 
       {/* KPI Section */}
@@ -67,7 +94,7 @@ const Index = () => {
       </div>
 
       {/* Secondary Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <div>
           <FuelMonitoring />
         </div>
@@ -77,6 +104,11 @@ const Index = () => {
         <div>
           <VehicleDiagnostics />
         </div>
+      </div>
+      
+      {/* User Activity Section */}
+      <div className="mb-6">
+        <UserActivity />
       </div>
     </DashboardLayout>
   );

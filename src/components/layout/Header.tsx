@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { 
   Search, 
   Bell, 
@@ -8,7 +8,8 @@ import {
   Settings,
   LogOut,
   HelpCircle,
-  FileBarChart
+  FileBarChart,
+  Download
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -26,8 +27,13 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
+import { DashboardContext } from './DashboardLayout';
+import { useToast } from '@/hooks/use-toast';
 
 const Header: React.FC = () => {
+  const { openDrawer } = useContext(DashboardContext);
+  const { toast } = useToast();
+
   const notifications = [
     {
       id: 1,
@@ -56,10 +62,53 @@ const Header: React.FC = () => {
   ];
 
   const quickActions = [
-    { name: 'Generate Report', icon: FileBarChart },
-    { name: 'Settings', icon: Settings },
-    { name: 'Help', icon: HelpCircle }
+    { 
+      name: 'Generate Report', 
+      icon: FileBarChart,
+      action: () => {
+        toast({
+          title: "Generating Report",
+          description: "Your report is being generated. It will be available shortly.",
+        });
+      }
+    },
+    { 
+      name: 'Download Data', 
+      icon: Download,
+      action: () => {
+        toast({
+          title: "Downloading Data",
+          description: "Your data is being prepared for download.",
+        });
+      }
+    },
+    { 
+      name: 'Settings', 
+      icon: Settings,
+      action: () => openDrawer('settings', 'Settings', {})
+    },
+    { 
+      name: 'Help', 
+      icon: HelpCircle,
+      action: () => {
+        toast({
+          title: "Help Center",
+          description: "Opening help documentation in a new window.",
+        });
+      }
+    }
   ];
+
+  const handleViewAllNotifications = () => {
+    openDrawer('notification', 'All Notifications', {});
+  };
+
+  const handleMarkAllAsRead = () => {
+    toast({
+      title: "Notifications Updated",
+      description: "All notifications have been marked as read.",
+    });
+  };
 
   return (
     <header className="h-16 px-6 flex items-center justify-between bg-white border-b">
@@ -89,11 +138,22 @@ const Header: React.FC = () => {
           <PopoverContent className="w-80 p-0" align="end">
             <div className="flex items-center justify-between px-4 py-2 border-b">
               <h3 className="font-semibold">Notifications</h3>
-              <Button variant="link" size="sm" className="text-xs text-primary">Mark all as read</Button>
+              <Button 
+                variant="link" 
+                size="sm" 
+                className="text-xs text-primary"
+                onClick={handleMarkAllAsRead}
+              >
+                Mark all as read
+              </Button>
             </div>
             <div className="max-h-[300px] overflow-y-auto">
               {notifications.map((notification) => (
-                <div key={notification.id} className={`px-4 py-3 border-b last:border-0 ${notification.unread ? 'bg-blue-50' : ''}`}>
+                <div 
+                  key={notification.id} 
+                  className={`px-4 py-3 border-b last:border-0 ${notification.unread ? 'bg-blue-50' : ''} cursor-pointer`}
+                  onClick={() => openDrawer('notification', notification.title, notification)}
+                >
                   <div className="flex items-start gap-3">
                     <div className={`mt-1 status-indicator ${notification.type === 'warning' ? 'status-warning' : 'status-active'}`}></div>
                     <div>
@@ -106,7 +166,13 @@ const Header: React.FC = () => {
               ))}
             </div>
             <div className="p-2 border-t">
-              <Button variant="outline" className="w-full text-sm">View All Notifications</Button>
+              <Button 
+                variant="outline" 
+                className="w-full text-sm"
+                onClick={handleViewAllNotifications}
+              >
+                View All Notifications
+              </Button>
             </div>
           </PopoverContent>
         </Popover>
@@ -121,7 +187,11 @@ const Header: React.FC = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {quickActions.map((action) => (
-              <DropdownMenuItem key={action.name} className="cursor-pointer">
+              <DropdownMenuItem 
+                key={action.name} 
+                className="cursor-pointer"
+                onClick={action.action}
+              >
                 <action.icon size={16} className="mr-2" />
                 <span>{action.name}</span>
               </DropdownMenuItem>
@@ -144,7 +214,10 @@ const Header: React.FC = () => {
               <CircleUser size={16} className="mr-2" />
               <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem 
+              className="cursor-pointer"
+              onClick={() => openDrawer('settings', 'Settings', {})}
+            >
               <Settings size={16} className="mr-2" />
               <span>Settings</span>
             </DropdownMenuItem>

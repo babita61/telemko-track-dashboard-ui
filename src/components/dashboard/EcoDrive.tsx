@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
 const EcoDrive: React.FC = () => {
   const driverScores = [
@@ -44,9 +45,9 @@ const EcoDrive: React.FC = () => {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Options</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View Detailed Report</DropdownMenuItem>
-            <DropdownMenuItem>Configure Scoring</DropdownMenuItem>
-            <DropdownMenuItem>Export Data</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">View Detailed Report</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">Configure Scoring</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">Export Data</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>
@@ -90,7 +91,10 @@ const EcoDrive: React.FC = () => {
                 <Progress 
                   value={driver.score} 
                   className="h-2" 
-                  indicatorClassName={getScoreColor(driver.score)} 
+                  // Fix: Use cn helper to merge custom color class with default styles
+                  style={{
+                    ['--progress-indicator-color' as any]: `var(--${getScoreColor(driver.score).replace('bg-', '')})`
+                  }}
                 />
               </div>
             ))}
