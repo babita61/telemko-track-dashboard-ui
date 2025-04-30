@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,13 +62,68 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+                telemko: {
+                    blue: {
+                        100: '#E6F0FF',
+                        200: '#BFDBFE',
+                        300: '#93C5FD',
+                        400: '#60A5FA',
+                        500: '#3B82F6',
+                        600: '#2563EB',
+                        700: '#1D4ED8',
+                        800: '#1E40AF',
+                        900: '#1E3A8A'
+                    },
+                    green: {
+                        100: '#DCFCE7',
+                        200: '#BBF7D0',
+                        300: '#86EFAC',
+                        400: '#4ADE80',
+                        500: '#22C55E',
+                        600: '#16A34A',
+                        700: '#15803D',
+                        800: '#166534',
+                        900: '#14532D'
+                    },
+                    gray: {
+                        100: '#F5F7FA',
+                        200: '#E4E8F0',
+                        300: '#D1D5DB',
+                        400: '#9CA3AF',
+                        500: '#6B7280',
+                        600: '#4B5563',
+                        700: '#374151',
+                        800: '#1F2937',
+                        900: '#111827'
+                    },
+                    red: {
+                        100: '#FEE2E2',
+                        200: '#FECACA',
+                        500: '#EF4444',
+                        600: '#DC2626'
+                    },
+                    yellow: {
+                        100: '#FEF3C7',
+                        200: '#FDE68A',
+                        500: '#F59E0B',
+                        600: '#D97706'
+                    }
+                }
 			},
+			fontFamily: {
+                sans: ['Inter', 'sans-serif'],
+				mono: ['Menlo', 'Monaco', 'Courier New', 'monospace']
+            },
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			boxShadow: {
+                'card': '0 2px 8px rgba(0, 0, 0, 0.05)',
+                'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+            },
 			keyframes: {
 				'accordion-down': {
 					from: {
@@ -84,11 +140,21 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+                'fade-in': {
+                    '0%': { opacity: '0' },
+                    '100%': { opacity: '1' }
+                },
+                'pulse-soft': {
+                    '0%, 100%': { opacity: '1' },
+                    '50%': { opacity: '0.8' }
+                }
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+                'fade-in': 'fade-in 0.3s ease-out',
+                'pulse-soft': 'pulse-soft 3s infinite ease-in-out'
 			}
 		}
 	},
