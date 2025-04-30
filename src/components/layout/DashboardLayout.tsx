@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import RightDrawer from './RightDrawer';
+import { Button } from '@/components/ui/button';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
