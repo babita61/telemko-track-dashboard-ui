@@ -1,13 +1,14 @@
 
-import React, { useContext } from 'react';
-import DashboardLayout, { DashboardContext } from '@/components/layout/DashboardLayout';
+import React from 'react';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import { useDashboard } from '@/context/DashboardContext'; // Updated import
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Fuel, Download, BarChart, Droplets, Gauge } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
 const FuelPage = () => {
-  const { openDrawer } = useContext(DashboardContext);
+  const { openDrawer } = useDashboard(); // Using the hook
   const { toast } = useToast();
   
   const vehicles = [

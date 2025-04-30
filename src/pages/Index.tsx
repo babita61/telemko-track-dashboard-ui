@@ -1,6 +1,7 @@
 
-import React, { useContext } from 'react';
-import DashboardLayout, { DashboardContext } from '@/components/layout/DashboardLayout';
+import React from 'react';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import { useDashboard } from '@/context/DashboardContext'; // Updated import
 import KpiCard from '@/components/dashboard/KpiCard';
 import { Route, MapPin, Fuel, Leaf, Download } from 'lucide-react';
 import VehicleMap from '@/components/dashboard/VehicleMap';
@@ -14,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
-  const { openDrawer } = useContext(DashboardContext);
+  const { openDrawer } = useDashboard(); // Using the hook
   const { toast } = useToast();
   
   const handleExportDashboard = () => {

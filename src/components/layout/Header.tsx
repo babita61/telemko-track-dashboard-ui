@@ -1,5 +1,5 @@
 
-import React, { useContext } from 'react';
+import React from 'react';
 import { 
   Search, 
   Bell, 
@@ -27,11 +27,11 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
-import { DashboardContext } from './DashboardLayout';
+import { useDashboard } from '@/context/DashboardContext'; // Updated import
 import { useToast } from '@/hooks/use-toast';
 
 const Header: React.FC = () => {
-  const { openDrawer } = useContext(DashboardContext);
+  const { openDrawer } = useDashboard(); // Using the hook
   const { toast } = useToast();
 
   const notifications = [
